@@ -43,10 +43,18 @@ const cb = (res) => {
   
 }
 
-const google_login = () => {
-    googleSdkLoaded(g => {
+const google_login = async () => {
+    console.log("google_login")
+    console.log("window*", window.google)
+
+ 
+    if(window.google){
+        console.log("window.google*:", window.google)
+        window.google()
+
+        /*googleSdkLoaded(g => {
         g.accounts.oauth2.initCodeClient({
-            client_id: '537581329110-io2hd31s5vrc6ivc6l7fa9sirf6gp436.apps.googleusercontent.com',
+            client_id: process.env.VUE_APP_CLIENT1,
             scope: "farrag.mustapha@gmail.com",
             state: "Enabled",
             //redirect_uri: "http://localhost:8080/profile",
@@ -58,7 +66,10 @@ const google_login = () => {
             }
 
         })
-    })
+    })*/
+
+    }
+    
 }
 
 const login = (email, pass) => {
