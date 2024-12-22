@@ -4,7 +4,21 @@
         <div>
             <AuthForm @login="login" :auth_type="auth_type"/>
 
-            <button @click="switchAuth">{{ auth_type == "register" ?  "login" : "register" }}</button>
+            <div class="flex flex-col gap-3" v-if="auth_type == 'login'">
+                 <button @click="google_login">Google Login</button>
+                <button>Apple Login</button>
+                <button>Facebook Login</button>
+                <GoogleLogin :callback="cb"></GoogleLogin>
+            </div>
+
+            <div class="flex flex-col gap-3" v-else>
+                 <button>Google Register</button>
+                <button>Apple Register</button>
+                <button>Facebook Register</button>
+            </div>
+           
+
+            <button class="my-4" @click="switchAuth">{{ auth_type == "register" ?  "login" : "register" }}</button>
 
         </div>
     </div>
@@ -15,12 +29,37 @@ import { ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import AuthForm from '@/components/AuthForm'
+import { GoogleLogin, googleSdkLoaded } from 'vue3-google-login';
 
 const router = useRouter()
 
 const store = useStore()
 
 const auth_type = ref("register")
+
+const cb = (res) => {
+    console.log("Handle the response:", res)
+
+  
+}
+
+const google_login = () => {
+    googleSdkLoaded(g => {
+        g.accounts.oauth2.initCodeClient({
+            client_id: '537581329110-io2hd31s5vrc6ivc6l7fa9sirf6gp436.apps.googleusercontent.com',
+            scope: "farrag.mustapha@gmail.com",
+            state: "Enabled",
+            //redirect_uri: "http://localhost:8080/profile",
+            callback: response => {
+                console.log("response:", response)
+                if(response.code){
+                    console.log("response:", response)
+                }
+            }
+
+        })
+    })
+}
 
 const login = (email, pass) => {
     store.commit('setAuth')
@@ -44,4 +83,7 @@ watchEffect(() => {
 })
 </script>
 
-<style scoped></style>
+<style scoped>
+
+
+</style>
